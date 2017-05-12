@@ -1,0 +1,13 @@
+{
+  "minimum-stability" : "dev",
+  "require": {
+    "jclg/php-slack-bot": "dev-master",
+    "symfony/console": "^3.2",
+    "illuminate/database": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Presence\\": "src/Presence"
+    }
+  }
+}
