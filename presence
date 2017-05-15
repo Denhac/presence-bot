@@ -3,6 +3,6 @@ require __DIR__.'/vendor/autoload.php';
 
 $app = new \Presence\Application();
 
-$app->bootDatabase()->registerCommands();
+$app->loadEnv(__DIR__)->bootDatabase()->registerCommands();
 
 $app->run();

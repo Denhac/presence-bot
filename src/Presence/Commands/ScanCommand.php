@@ -31,7 +31,7 @@ class ScanCommand extends Command
         $this->setName('scan')
             ->addArgument(
                 'interface',
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'The interface name.'
             )
             ->setDescription('Launch the bot')

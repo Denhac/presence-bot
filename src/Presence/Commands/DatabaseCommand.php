@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * TODO: Describeme
  *
- * @author Mark Vaughn <mark@roundsphere.com>
+ * @author Mark Vaughn <iftrueelsefalse@gmail.com>
  * @package Presence\Commands
  */
 class DatabaseCommand extends Command

@@ -3,7 +3,8 @@
   "require": {
     "jclg/php-slack-bot": "dev-master",
     "symfony/console": "^3.2",
-    "illuminate/database": "^5.4"
+    "illuminate/database": "^5.4",
+    "josegonzalez/dotenv": "dev-master"
   },
   "autoload": {
     "psr-4": {

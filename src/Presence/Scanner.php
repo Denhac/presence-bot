@@ -29,21 +29,26 @@ class Scanner
      *
      * @param string $interface
      */
-    public function __construct($interface = 'eth0')
+    public function __construct($interface = null)
     {
         $this->interface = $interface;
     }
 
     /**
+     * Runs arp scan and returns a list of Scan Records.
+     *
      * @return ScanRecord[]
      */
     public function scan()
     {
+        // If no interface is provided we will scan all.
+        $command = $this->interface ? sprintf(
+            'arp-scan --interface=%s -l',
+            $this->interface
+        ) : 'arp-scan -l';
+
         $arp_scan = shell_exec(
-            sprintf(
-                'arp-scan --interface=%s -l',
-                $this->interface
-            )
+            $command
 
         );
         $arp_scan = explode("\n", $arp_scan);
@@ -52,6 +57,7 @@ class Scanner
         foreach ($arp_scan as $scan) {
             $matches = [];
 
+            // Matching the arp-scan output
             if (preg_match(
                     '/^([0-9\.]+)[[:space:]]+([0-9a-f:]+)[[:space:]]+(.+)$/',
                     $scan,

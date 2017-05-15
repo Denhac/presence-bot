@@ -11,7 +11,7 @@
 
 namespace Presence;
 
-use Illuminate\Database\Schema\Blueprint;
+use josegonzalez\Dotenv\Loader;
 use Presence\Commands\BotCommand;
 use Presence\Commands\DatabaseCommand;
 use Presence\Commands\ScanCommand;
@@ -26,6 +26,28 @@ use Illuminate\Database\Capsule\Manager;
  */
 class Application extends BaseApplication
 {
+    /**
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function loadEnv($path)
+    {
+        $config = $path . DIRECTORY_SEPARATOR . '.env';
+        echo 'Loading config ' . $config . "\n";
+        Loader::load(
+            [
+                'filepath' => $config,
+                'expect' => ['BOT_TOKEN'],
+                'toEnv' => true,
+                'toServer' => true,
+                'define' => true,
+            ]
+        )->putenv();
+
+        return $this;
+    }
+
     /**
      * @return $this
      */
@@ -49,7 +71,6 @@ class Application extends BaseApplication
     {
         $manager = new Manager();
 
-        //SUPER SECURE!
         $manager->addConnection(
             [
                 'driver' => 'mysql',
@@ -71,6 +92,7 @@ class Application extends BaseApplication
     protected function conf($env, $default = null)
     {
         $value = getenv($env);
+
         return $value ? $value : $default;
     }
 }
