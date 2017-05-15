@@ -5,7 +5,7 @@ raspberry pi, hide it in a cupboard.
 
 ## prerequisites
 
-`php7`, `mysql`, cuz I'm lazy
+`php7`, `mysql`, `arp-scan`
 
 ## set up
 1. After cloning this repository run `composer install`
@@ -14,7 +14,7 @@ raspberry pi, hide it in a cupboard.
 4. Set up a minutely cron task under root that runs `php presence 
 scan`.
 5. `php presence bot` will start up the bot, it needs root permision to do 
-the arp scan, so either sudo or use root. Make sure you have a valid token!
+the arp scan, so either sudo or use root. Make sure you have a valid token from here https://www.slack.com/apps/A0F7YS25R-bots
 5. Verify the bot works via `@presence help`
 
 ## bot commands
