@@ -5,7 +5,7 @@ raspberry pi, hide it in a cupboard.
 
 ## prerequisites
 
-`php7`, `mysql`, `arp-scan`
+`php7`, `mysql`, `arp-scan`, `composer` - Try getting these with apt-get or brew or whatever
 
 ## set up
 1. After cloning this repository run `composer install`
