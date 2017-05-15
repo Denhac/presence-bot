@@ -18,7 +18,7 @@ the arp scan, so either sudo or use root. Make sure you have a valid token!
 5. Verify the bot works via `@presence help`
 
 ## bot commands
-the bot is triggered via `presence` or `@{thbotsusername`
+the bot is triggered via `presence` or `@{thbotsusername}`
  - `register xx:xx:xx:xx:xx:xx` to associate yourself with a mac address
  - `remove xx:xx:xx:xx:xx:xx` to undo previous association
  - `who is here`, `whoishere`, `who's here` I'll let you know who is in the house
