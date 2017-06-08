@@ -2,7 +2,7 @@
 
 namespace Presence;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\Expression;
 use PhpSlackBot\Command\BaseCommand;
 
 /**
@@ -138,7 +138,7 @@ class Bot extends BaseCommand
             ->where('user', '<>', 'unknown')
             ->groupBy('user')
             ->limit($limit)
-            ->get(['*', DB::raw('SUM(minutes) as minutes')])->all();
+            ->get(['*', new Expression('SUM(minutes) as minutes')])->all();
 
         $message = [
             sprintf('Top *%d* users:', $limit),
