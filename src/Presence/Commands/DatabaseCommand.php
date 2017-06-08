@@ -34,6 +34,7 @@ class DatabaseCommand extends Command
                 $table->string('user', 128)->nullable();
                 $table->string('description', 128)->nullable();
                 $table->integer('minutes')->default(0);
+                $table->dateTime('last_seen_at')->nullable();
             }
         );
     }

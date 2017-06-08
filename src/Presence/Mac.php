@@ -2,6 +2,7 @@
 
 namespace Presence;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $user
  * @property string $description
  * @property int $minutes
+ * @property Carbon $last_seen_at
  *
  * @author Mark Vaughn <iftrueelsefalse@gmail.com>
  * @package Presence
@@ -26,6 +28,10 @@ class Mac extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    protected $dates = [
+        'last_seen_at',
+    ];
 
     /**
      * A human readable representation of the minutes spent in the office.

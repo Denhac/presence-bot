@@ -2,6 +2,7 @@
 
 namespace Presence\Commands;
 
+use Carbon\Carbon;
 use Presence\Mac;
 use Presence\Scanner;
 use Symfony\Component\Console\Command\Command;
@@ -45,6 +46,7 @@ class ScanCommand extends Command
                     ]
                 );
             } else {
+                $mac->last_seen_at = Carbon::now();
                 $mac->minutes++;
                 $mac->save();
             }
