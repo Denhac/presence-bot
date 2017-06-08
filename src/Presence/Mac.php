@@ -27,11 +27,9 @@ class Mac extends Model
 
     public $timestamps = false;
 
-    protected $guarded = [];
+    protected $dateFormat = 'Y-m-d H:i:s';
 
-    protected $dates = [
-        'last_seen_at',
-    ];
+    protected $guarded = [];
 
     /**
      * A human readable representation of the minutes spent in the office.
