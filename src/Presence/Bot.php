@@ -2,6 +2,7 @@
 
 namespace Presence;
 
+use Illuminate\Support\Facades\DB;
 use PhpSlackBot\Command\BaseCommand;
 
 /**
@@ -74,11 +75,11 @@ class Bot extends BaseCommand
                     $this->ranking($text);
                     break;
                 case preg_match(
-                        '/register ([a-f0-9:]{17})/',
+                        '/register ([a-f0-9:]{17})/i',
                         $text,
                         $matches
                     ) > 0:
-                    $this->register($matches[1], $user);
+                    $this->register(strtolower($matches[1]), $user);
                     break;
                 case preg_match(
                         '/(remove|deregister) ([a-f0-9:]{17})/',
@@ -87,9 +88,13 @@ class Bot extends BaseCommand
                     ) > 0:
                     $this->deRegister($matches[2]);
                     break;
+                case stristr($text, 'admin'):
+                    $this->arpScan();
+                    break;
+                default:
+                    $this->sendToCurrent("Does not compute!");
+                    break;
             }
-            // TODO: See what we wanna do with this.
-            // $this->arpScan();
         }
     }
 
@@ -131,8 +136,9 @@ class Bot extends BaseCommand
         /** @var Mac[] $records */
         $records = Mac::query()->orderBy('minutes', 'desc')
             ->where('user', '<>', 'unknown')
+            ->groupBy('user')
             ->limit($limit)
-            ->get()->all();
+            ->get(['*', DB::raw('SUM(minutes) as minutes')])->all();
 
         $message = [
             sprintf('Top *%d* users:', $limit),
