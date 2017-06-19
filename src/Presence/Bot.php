@@ -91,6 +91,10 @@ class Bot extends BaseCommand
                 case stristr($text, 'admin'):
                     $this->arpScan();
                     break;
+                case stristr($text, "what's your purpose"):
+                case stristr($text, 'what is your purpose'):
+                    $this->rickAndMorty();
+                    break;
                 default:
                     $this->sendToCurrent("Does not compute!");
                     break;
@@ -98,6 +102,9 @@ class Bot extends BaseCommand
         }
     }
 
+    /**
+     * Dodgy AF
+     */
     protected function arpScan()
     {
         $scanner = new Scanner($this->interface);
@@ -253,6 +260,16 @@ class Bot extends BaseCommand
         }
 
         $this->sendToCurrent($message);
+    }
+
+    /**
+     * Easter egg.
+     */
+    protected function rickAndMorty()
+    {
+        $this->sendToCurrent('I tell people who is at the space.');
+        sleep(3);
+        $this->sendToCurrent('Oh my god!');
     }
 
     /**
