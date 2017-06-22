@@ -269,7 +269,7 @@ class Bot extends BaseCommand
     {
         $this->sendToCurrent('I tell people who is at the space.');
         sleep(3);
-        $this->sendToCurrent('......Oh my God :|');
+        $this->sendToCurrent('......Oh my God');
     }
 
     /**
