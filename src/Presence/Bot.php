@@ -95,6 +95,12 @@ class Bot extends BaseCommand
                 case stristr($text, 'what is your purpose'):
                     $this->rickAndMorty();
                     break;
+                case stristr($text, 'comput'): // compute, computing, computer
+                case stristr($text, 'calculat'): // calculate, calculating, calculations
+                    $this->sendToCurrent("logic unit activated...");
+                    sleep(2);
+                    $this->sendToCurrent("emit: 42");
+                    break;                    
                 default:
                     $this->sendToCurrent("Does not compute!");
                     break;
