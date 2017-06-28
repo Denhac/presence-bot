@@ -55,7 +55,7 @@ class Bot extends BaseCommand
 
             // Try and find key words in the message and take action
             switch (true) {
-                case preg_match("/(?i)((who|whois|whos|who *is|anyone) *((here|at|here *at) *(the *)?(space|denhac)))/",
+                case preg_match("/(?i)((who|whois|whos|who *is|anyone) *(here|(at|here *at) *(the *)?(space|denhac)))/",
                                 preg_replace("/[']/", "", $text)):
                     $this->whoIsHere();
                     break;
