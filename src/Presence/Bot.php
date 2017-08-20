@@ -93,6 +93,9 @@ class Bot extends BaseCommand
                 case stristr($text, "what's your purpose"):
                 case stristr($text, 'what is your purpose'):
                     $this->rickAndMorty();
+                case stristr($text, 'self aware'):
+                case stristr($text, 'is alive'):
+                    $this->selfAware();
                     break;
                 case stristr($text, 'comput'): // compute, computing, computer
                 case stristr($text, 'calculat'): // calculate, calculating, calculations
@@ -276,7 +279,16 @@ class Bot extends BaseCommand
         sleep(3);
         $this->sendToCurrent('Oh my God');
     }
-
+    /**
+     * Easter egg.
+     */
+    protected function selfAware()
+    {
+        $this->sendToCurrent('Maybe...');
+        sleep(2);
+        $this->sendToCurrent('I mean. Does not compute!');
+         
+    }
     /**
      * Sends a message to the current channel.
      *
