@@ -2,12 +2,13 @@
 
 namespace Presence;
 
+use Illuminate\Database\Capsule\Manager;
 use josegonzalez\Dotenv\Loader;
+use LogicException;
 use Presence\Commands\BotCommand;
 use Presence\Commands\DatabaseCommand;
 use Presence\Commands\ScanCommand;
 use Symfony\Component\Console\Application as BaseApplication;
-use Illuminate\Database\Capsule\Manager;
 
 /**
  * Class Application.
@@ -18,28 +19,39 @@ use Illuminate\Database\Capsule\Manager;
 class Application extends BaseApplication
 {
     /**
-     * @param string $path
+     * Loads the .env file. checking weather the BOT_TOKEN is present.
      *
+     * @param $path
+     *
+     * @throws PresenceException
+     * @throws LogicException
      * @return $this
      */
     public function loadEnv($path)
     {
         $config = $path . DIRECTORY_SEPARATOR . '.env';
-        echo 'Loading config ' . $config . "\n";
-        Loader::load(
-            [
-                'filepath' => $config,
-                'expect' => ['BOT_TOKEN'],
-                'toEnv' => true,
-                'toServer' => true,
-                'define' => true,
-            ]
-        )->putenv();
+
+        if (file_exists($path)) {
+            echo 'Loading config ' . $config . "\n";
+            Loader::load(
+                [
+                    'filepath' => $config,
+                    'expect' => ['BOT_TOKEN'],
+                    'toEnv' => true,
+                    'toServer' => true,
+                    'define' => true,
+                ]
+            )->putenv();
+        } else {
+            throw new PresenceException('.env file does not exist!');
+        }
 
         return $this;
     }
 
     /**
+     * Registers all possible commands for the command line.
+     *
      * @return $this
      */
     public function registerCommands()
@@ -56,6 +68,8 @@ class Application extends BaseApplication
     }
 
     /**
+     * Connect to the database.
+     *
      * @return $this
      */
     public function bootDatabase()
@@ -80,6 +94,14 @@ class Application extends BaseApplication
         return $this;
     }
 
+    /**
+     * Retrieve ENV values or return their default.
+     *
+     * @param string $env
+     * @param null $default
+     *
+     * @return array|false|null|string
+     */
     protected function conf($env, $default = null)
     {
         $value = getenv($env);

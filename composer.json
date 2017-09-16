@@ -1,4 +1,5 @@
 {
+  "description" : "A bot that monitors the presence of machines on a network.",
   "minimum-stability" : "dev",
   "require": {
     "jclg/php-slack-bot": "dev-master",

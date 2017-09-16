@@ -28,7 +28,6 @@ class Bot extends BaseCommand
 
     protected function execute($data, $context)
     {
-
         if (empty($this->myId)) {
             $this->myId = $this->getCurrentContext()['self']['id'];
         }
@@ -55,8 +54,10 @@ class Bot extends BaseCommand
 
             // Try and find key words in the message and take action
             switch (true) {
-                case preg_match("/(?i)((who|whois|whos|who *is|anyone) *(here|(at|here *at) *(the *)?(space|denhac)))/",
-                                preg_replace("/[']/", "", $text)):
+                case preg_match(
+                    '/(?i)((who|whois|whos|who *is|anyone) *(here|(at|here *at) *(the *)?(space|denhac)))/',
+                    preg_replace("/[']/", '', $text)
+                ):
                     $this->whoIsHere();
                     break;
                 case stristr($text, 'who am i'):
@@ -98,20 +99,23 @@ class Bot extends BaseCommand
                     $this->selfAware();
                     break;
                 case stristr($text, 'comput'): // compute, computing, computer
-                case stristr($text, 'calculat'): // calculate, calculating, calculations
-                    $this->sendToCurrent("logic unit activated...");
+                case stristr(
+                    $text,
+                    'calculat'
+                ): // calculate, calculating, calculations
+                    $this->sendToCurrent('logic unit activated...');
                     sleep(2);
-                    $this->sendToCurrent("emit: 42");
-                    break;                    
+                    $this->sendToCurrent('emit: 42');
+                    break;
                 default:
-                    $this->sendToCurrent("Does not compute!");
+                    $this->sendToCurrent('Does not compute!');
                     break;
             }
         }
     }
 
     /**
-     * Dodgy AF
+     * Dodgy AF.
      */
     protected function arpScan()
     {
@@ -120,7 +124,7 @@ class Bot extends BaseCommand
         $messages = array_map(
             function (ScanRecord $record) {
                 return sprintf(
-                    "Found device with mac address `%s` (%s) and ip `%s`",
+                    'Found device with mac address `%s` (%s) and ip `%s`',
                     $record->mac,
                     $record->description,
                     $record->ip
@@ -279,6 +283,7 @@ class Bot extends BaseCommand
         sleep(3);
         $this->sendToCurrent('Oh my God');
     }
+
     /**
      * Easter egg.
      */
@@ -287,8 +292,8 @@ class Bot extends BaseCommand
         $this->sendToCurrent('Maybe...');
         sleep(2);
         $this->sendToCurrent('I mean. Does not compute!');
-         
     }
+
     /**
      * Sends a message to the current channel.
      *

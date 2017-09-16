@@ -11,13 +11,15 @@ namespace Presence;
 class ScanRecord
 {
     public $ip;
+
     public $mac;
+
     public $description;
 
     public function __toString()
     {
         return sprintf(
-            "Found device with mac address `%s` (%s) and ip `%s`",
+            'Found device with mac address `%s` (%s) and ip `%s`',
             $this->mac,
             $this->description,
             $this->ip
