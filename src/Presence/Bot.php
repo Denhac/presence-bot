@@ -22,8 +22,12 @@ class Bot extends BaseCommand
         $this->interface = $interface;
     }
 
+    /**
+     * Abstract method, unused.
+     */
     protected function configure()
     {
+        //
     }
 
     protected function execute($data, $context)
@@ -37,7 +41,7 @@ class Bot extends BaseCommand
             $text = $data['text'];
 
             // Only take messages containing our own uid or presence
-            $match = preg_match("/presence|{$this->myId}/", $text, $test);
+            $match = preg_match("/presence|{$this->myId}/", $text);
             if ($match === 0) {
                 return;
             }

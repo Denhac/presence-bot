@@ -31,20 +31,20 @@ class Application extends BaseApplication
     {
         $config = $path . DIRECTORY_SEPARATOR . '.env';
 
-        if (file_exists($path)) {
-            echo 'Loading config ' . $config . "\n";
-            Loader::load(
-                [
-                    'filepath' => $config,
-                    'expect' => ['BOT_TOKEN'],
-                    'toEnv' => true,
-                    'toServer' => true,
-                    'define' => true,
-                ]
-            )->putenv();
-        } else {
+        if (!file_exists($path)) {
             throw new PresenceException('.env file does not exist!');
         }
+
+        echo 'Loading config ' . $config . "\n";
+        Loader::load(
+            [
+                'filepath' => $config,
+                'expect' => ['BOT_TOKEN'],
+                'toEnv' => true,
+                'toServer' => true,
+                'define' => true,
+            ]
+        )->putenv();
 
         return $this;
     }
