@@ -45,11 +45,12 @@ class ScanCommand extends Command
                         'minutes' => 1,
                     ]
                 );
-            } else {
-                $mac->last_seen_at = Carbon::now()->toDateTimeString();
-                $mac->minutes++;
-                $mac->save();
+
+                return;
             }
+            $mac->last_seen_at = Carbon::now()->toDateTimeString();
+            $mac->minutes++;
+            $mac->save();
         }
     }
 }

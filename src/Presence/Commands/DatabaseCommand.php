@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DatabaseCommand extends Command
 {
-
     protected function configure()
     {
         $this->setName('database')
@@ -38,5 +37,4 @@ class DatabaseCommand extends Command
             }
         );
     }
-
 }

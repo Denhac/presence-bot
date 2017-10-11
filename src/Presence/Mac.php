@@ -52,5 +52,4 @@ class Mac extends Model
 
         return $string;
     }
-
 }
