@@ -98,6 +98,7 @@ class Bot extends BaseCommand
                 case stristr($text, "what's your purpose"):
                 case stristr($text, 'what is your purpose'):
                     $this->rickAndMorty();
+                    break;
                 case stristr($text, 'self aware'):
                 case stristr($text, 'is alive'):
                     $this->selfAware();
