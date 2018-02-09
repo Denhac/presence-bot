@@ -86,11 +86,18 @@ class Bot extends BaseCommand
                     $this->register(strtolower($matches[1]), $user);
                     break;
                 case preg_match(
-                        '/(remove|deregister) ([a-f0-9:]{17})/',
+                        '/(remove|deregister) ([a-f0-9:]{17})/i',
                         $text,
                         $matches
                     ) > 0:
-                    $this->deRegister($matches[2]);
+                    $this->deRegister(strtolower($matches[2]));
+                    break;
+                case preg_match(
+                        '/blacklist ([a-f0-9:]{17})/i',
+                        $text,
+                        $matches
+                    ) > 0:
+                    $this->blacklist(strtolower($matches[1]));
                     break;
                 case stristr($text, 'admin'):
                     $this->arpScan();
@@ -252,6 +259,27 @@ class Bot extends BaseCommand
         $this->sendToCurrent(
             sprintf(
                 'removed %s from known devices',
+                $mac
+            )
+        );
+    }
+
+    /**
+     * Blacklists a mac address.
+     *
+     * @param string $mac
+     */
+    protected function blacklist($mac)
+    {
+        /** @var Mac $record */
+        $record = Mac::query()->findOrNew($mac);
+        $record->id = $mac;
+        $record->user = 'blacklist';
+        $record->save();
+
+        $this->sendToCurrent(
+            sprintf(
+                'blacklisted %s from known devices',
                 $mac
             )
         );
