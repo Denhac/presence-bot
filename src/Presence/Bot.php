@@ -350,6 +350,7 @@ class Bot extends BaseCommand
             'Commands I understand:',
             ' - `register xx:xx:xx:xx:xx:xx` to associate yourself with a mac address',
             ' - `remove xx:xx:xx:xx:xx:xx` to undo previous association',
+            ' - `blacklist xx:xx:xx:xx:xx:xx` to blacklist a mac address so it won\'t show up' ,
             " - `who is here`, `whoishere`, `who's here` I'll let you know who is in the house",
             ' - `top x` listing of the most active users 1-10',
             ' - `whoami` tells you what mac addresses you have claimed',
