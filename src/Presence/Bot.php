@@ -166,8 +166,7 @@ class Bot extends BaseCommand
         $limit = max(0, min($limit, 10));
         /** @var Mac[] $records */
         $records = Mac::query()->orderBy('minutes', 'desc')
-            ->where('user', '<>', 'unknown')
-            ->where('user', '<>', 'blacklist')
+            ->whereNotIn('user', ['unknown', 'blacklist'])
             ->groupBy('user')
             ->limit($limit)
             ->get(['*', new Expression('SUM(minutes) as minutes')])->all();
@@ -204,8 +203,7 @@ class Bot extends BaseCommand
         $found = Mac::query()->whereIn('id', $macs)
             ->limit(50)
             ->groupBy('user')
-            ->where('user', '<>', 'unknown')
-            ->where('user', '<>', 'blacklist')
+            ->whereNotIn('user', ['unknown', 'blacklist'])
             ->get();
 
         $total = count($records);
