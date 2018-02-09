@@ -167,12 +167,13 @@ class Bot extends BaseCommand
         /** @var Mac[] $records */
         $records = Mac::query()->orderBy('minutes', 'desc')
             ->whereNotIn('user', ['unknown', 'blacklist'])
+            ->where('minutes', '>', 0)
             ->groupBy('user')
             ->limit($limit)
             ->get(['*', new Expression('SUM(minutes) as minutes')])->all();
 
         $message = [
-            sprintf('Top *%d* users:', $limit),
+            sprintf('Top *%d* users:', count($records)),
         ];
 
         foreach ($records as $i => $record) {
