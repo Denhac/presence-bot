@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @author Mark Vaughn <iftrueelsefalse@gmail.com>
  * @package Presence
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder active() get active mac addresses
  */
 class Mac extends Model
 {
@@ -51,5 +53,16 @@ class Mac extends Model
         $string .= $minutes . ' minutes';
 
         return $string;
+    }
+
+    /**
+     * Scope a query to only include active mac addresses.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('last_seen_at', '<', Carbon::now()->subMinutes(3)->toDateTimeString());
     }
 }

@@ -190,37 +190,28 @@ class Bot extends BaseCommand
      */
     protected function whoIsHere()
     {
-        $scanner = new Scanner($this->interface);
-        $records = $scanner->scan();
-        $macs = $records
-            ->map(function($record) {
-                return $record->mac;
-            })
-            ->unique()
-            ->all();
-        $found = Mac::query()->whereIn('id', $macs)
-            ->limit(50)
-            ->groupBy('user')
-            ->whereNotIn('user', ['unknown', 'blacklist'])
-            ->get();
+        $unknown_macs_count = Mac::active()
+            ->where('user', 'unknown')
+            ->count();
 
-        $total = count($records);
-        $members = $found->count();
-        $guests = $total - $members;
+        $members = Mac::active()
+            ->whereNotIn('user', ['unknown', 'blacklist'])
+            ->pluck('user')
+            ->unique()
+            ->map(function($user) {
+                return $this->getUserNameFromUserId($user);
+            });
+
         $message = sprintf(
             '%d guests, %d members',
-            $guests,
-            $members
+            $unknown_macs_count,
+            $members->count()
         );
 
-        if ($members) {
-            $found->each(
-                function (Mac $record) {
-                    $record->user = $this->getUserNameFromUserId($record->user);
-                }
-            );
-            $message .= ', including ' . $found->implode('user', ', ');
+        if ($members->count() > 0) {
+            $message .= ', including ' . $members->implode('user', ', ');
         }
+
         $this->sendToCurrent($message);
     }
 
