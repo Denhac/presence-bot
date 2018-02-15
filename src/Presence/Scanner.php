@@ -28,7 +28,7 @@ class Scanner
     /**
      * Runs arp scan and returns a list of Scan Records.
      *
-     * @return ScanRecord[]
+     * @return \Illuminate\Support\Collection
      */
     public function scan()
     {
@@ -44,7 +44,7 @@ class Scanner
         );
         $arp_scan = explode("\n", $arp_scan);
 
-        $matches = $records = [];
+        $records = collect();
         foreach ($arp_scan as $scan) {
             $matches = [];
 
@@ -63,7 +63,7 @@ class Scanner
             $record->mac = $matches[2];
             $record->description = $matches[3];
 
-            $records[] = $record;
+            $records->push($record);
         }
 
         return $records;

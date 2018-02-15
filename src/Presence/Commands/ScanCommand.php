@@ -34,7 +34,7 @@ class ScanCommand extends Command
     {
         $scanner = new Scanner($input->getArgument('interface'));
         $records = $scanner->scan();
-        foreach ($records as $record) {
+        $records->each(function ($record) {
             $mac = Mac::find($record->mac);
             if ($mac == null) {
                 Mac::create(
@@ -51,6 +51,6 @@ class ScanCommand extends Command
             $mac->last_seen_at = Carbon::now()->toDateTimeString();
             $mac->minutes++;
             $mac->save();
-        }
+        });
     }
 }

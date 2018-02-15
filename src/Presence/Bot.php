@@ -133,21 +133,16 @@ class Bot extends BaseCommand
     {
         $scanner = new Scanner($this->interface);
         $records = $scanner->scan();
-        $messages = array_map(
-            function (ScanRecord $record) {
-                return sprintf(
-                    'Found device with mac address `%s` (%s) and ip `%s`',
-                    $record->mac,
-                    $record->description,
-                    $record->ip
-                );
-            },
-            $records
-        );
-        if (count($messages)) {
-            $this->sendToCurrent(
-                implode("\n", $messages)
-            );
+        if ($records->count() > 0) {
+            $message = $records
+                ->map(function ($record) {
+                    return (string)$record;
+                })
+                ->implode('\n');
+
+            $this->sendToCurrent($message);
+        } else {
+            $this->sendToCurrent('No records found on the network');
         }
     }
 
@@ -195,12 +190,12 @@ class Bot extends BaseCommand
     {
         $scanner = new Scanner($this->interface);
         $records = $scanner->scan();
-        $macs = array_map(
-            function (ScanRecord $record) {
+        $macs = $records
+            ->map(function($record) {
                 return $record->mac;
-            },
-            $records
-        );
+            })
+            ->unique()
+            ->all();
         $found = Mac::query()->whereIn('id', $macs)
             ->limit(50)
             ->groupBy('user')
