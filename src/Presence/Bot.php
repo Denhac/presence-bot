@@ -38,16 +38,16 @@ class Bot extends BaseCommand
 
         $isMessage = isset($data['type']) && $data['type'] === 'message';
         if ($this->myId && $isMessage) {
-            $text = $data['text'];
+            $incomingMessage = $data['text'];
 
             // Only take messages containing our own uid or presence
-            $match = preg_match("/presence|{$this->myId}/", $text);
+            $match = preg_match("/presence|{$this->myId}/", $incomingMessage);
             if ($match === 0) {
                 return;
             }
 
             // Strip the uid
-            $text = str_replace(['presence', $this->myId], '', $text);
+            $command = str_replace(['presence', $this->myId], '', $incomingMessage);
 
             // Who is talking to us?
             $user = $data['user'];
@@ -60,59 +60,59 @@ class Bot extends BaseCommand
             switch (true) {
                 case preg_match(
                     '/(?i)((who|whois|whos|who *is|anyone) *(here|(at|here *at) *(the *)?(space|denhac)))/',
-                    preg_replace("/[']/", '', $text)
+                    preg_replace("/[']/", '', $command)
                 ):
                     $this->whoIsHere();
                     break;
-                case stristr($text, 'who am i'):
-                case stristr($text, 'whoami'):
-                case stristr($text, "what's my mac"):
+                case stristr($command, 'who am i'):
+                case stristr($command, 'whoami'):
+                case stristr($command, "what's my mac"):
                     $this->whoAmI($user);
                     break;
-                case stristr($text, 'help'):
-                case stristr($text, 'commands'):
+                case stristr($command, 'help'):
+                case stristr($command, 'commands'):
                     $this->help();
                     break;
-                case stristr($text, 'top'):
-                case stristr($text, 'highscore'):
-                case stristr($text, 'best'):
-                    $this->ranking($text);
+                case stristr($command, 'top'):
+                case stristr($command, 'highscore'):
+                case stristr($command, 'best'):
+                    $this->ranking($command);
                     break;
                 case preg_match(
                         '/register ([a-f0-9:]{17})/i',
-                        $text,
+                        $command,
                         $matches
                     ) > 0:
                     $this->register(strtolower($matches[1]), $user);
                     break;
                 case preg_match(
                         '/(remove|deregister) ([a-f0-9:]{17})/i',
-                        $text,
+                        $command,
                         $matches
                     ) > 0:
                     $this->deRegister(strtolower($matches[2]));
                     break;
                 case preg_match(
                         '/blacklist ([a-f0-9:]{17})/i',
-                        $text,
+                        $command,
                         $matches
                     ) > 0:
                     $this->blacklist(strtolower($matches[1]));
                     break;
-                case stristr($text, 'admin'):
+                case stristr($command, 'admin'):
                     $this->arpScan();
                     break;
-                case stristr($text, "what's your purpose"):
-                case stristr($text, 'what is your purpose'):
+                case stristr($command, "what's your purpose"):
+                case stristr($command, 'what is your purpose'):
                     $this->rickAndMorty();
                     break;
-                case stristr($text, 'self aware'):
-                case stristr($text, 'is alive'):
+                case stristr($command, 'self aware'):
+                case stristr($command, 'is alive'):
                     $this->selfAware();
                     break;
-                case stristr($text, 'comput'): // compute, computing, computer
+                case stristr($command, 'comput'): // compute, computing, computer
                 case stristr(
-                    $text,
+                    $command,
                     'calculat'
                 ): // calculate, calculating, calculations
                     $this->sendToCurrent('logic unit activated...');
@@ -120,7 +120,9 @@ class Bot extends BaseCommand
                     $this->sendToCurrent('emit: 42');
                     break;
                 default:
-                    $this->sendToCurrent('Does not compute!');
+                    if(starts_with($incomingMessage, ['@presence', $this->myId])) {
+                        $this->sendToCurrent('Does not compute!');
+                    }
                     break;
             }
         }
