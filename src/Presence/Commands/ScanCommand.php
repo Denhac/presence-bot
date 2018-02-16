@@ -26,13 +26,18 @@ class ScanCommand extends Command
                 InputArgument::OPTIONAL,
                 'The interface name.'
             )
+            ->addArgument(
+                'hosts',
+                InputArgument::OPTIONAL,
+                'name of space separated hosts or subnets to scan.'
+            )
             ->setDescription('Launch the bot')
             ->setHelp('Allows lalala');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $scanner = new Scanner($input->getArgument('interface'));
+        $scanner = new Scanner($input->getArgument('interface'), $input->getArgument('hosts'));
         $records = $scanner->scan();
         $records->each(function ($record) {
             $mac = Mac::find($record->mac);

@@ -20,9 +20,10 @@ class Scanner
      *
      * @param string $interface
      */
-    public function __construct($interface = null)
+    public function __construct($interface = null, $hosts = null)
     {
         $this->interface = $interface;
+        $this->hosts = $hosts;
     }
 
     /**
@@ -32,11 +33,28 @@ class Scanner
      */
     public function scan()
     {
+        
+        $command = 'arp scan';
+
+        // if no hosts specified, don't do the thing
+        // just check for interface, and set --localnet
+        if (is_null($this->hosts)) {
+            $command .= $this->interface ? sprintf(
+                ' --interface=%s --localnet',
+                $this->interface
+            ) : ' -l';
+        // else, hosts are specified, and we don't need
+        // --localnet, but still check interface
+        else {
+            $command .= $this->interface ? sprintf(
+                ' --interface=%s %s',
+                $this->interface, $this->hosts
+            ) : sprintf(' %s', $this->hosts);
+        }
+
         // If no interface is provided we will scan all.
-        $command = $this->interface ? sprintf(
-            'arp-scan --interface=%s -l',
-            $this->interface
-        ) : 'arp-scan -l';
+        $command .= $this->interface ?: '-l ';
+        // If no 
 
         $arp_scan = shell_exec(
             $command
