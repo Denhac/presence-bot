@@ -49,11 +49,17 @@ class Bot extends BaseCommand
             // Strip the uid
             $command = str_replace(['presence', $this->myId], '', $incomingMessage);
 
-            // Who is talking to us?
-            $user = $data['user'];
-            if ($user === $this->myId) {
+            $isBot = array_key_exists('subtype', $data) && $data['subtype'] == 'bot_message';
+            $canIdentifyUser = array_key_exists('user', $data);
+
+            if ($canIdentifyUser && $data['user'] === $this->myId) {
                 // Let's not talk to ourselves
                 return;
+            }
+
+            if(! $isBot && $canIdentifyUser) {
+                // Who is talking to us?
+                $user_id = $data['user'];
             }
 
             // Try and find key words in the message and take action
@@ -67,7 +73,9 @@ class Bot extends BaseCommand
                 case stristr($command, 'who am i'):
                 case stristr($command, 'whoami'):
                 case stristr($command, "what's my mac"):
-                    $this->whoAmI($user);
+                    $this->guardAgainstBots($isBot, $canIdentifyUser, function() use ($user_id) {
+                        $this->whoAmI($user_id);
+                    });
                     break;
                 case stristr($command, 'help'):
                 case stristr($command, 'commands'):
@@ -83,7 +91,9 @@ class Bot extends BaseCommand
                         $command,
                         $matches
                     ) > 0:
-                    $this->register(strtolower($matches[1]), $user);
+                    $this->guardAgainstBots($isBot, $canIdentifyUser, function () use ($matches, $user_id) {
+                        $this->register(strtolower($matches[1]), $user_id);
+                    });
                     break;
                 case preg_match(
                         '/(remove|deregister) ([a-f0-9:]{17})/i',
@@ -120,11 +130,21 @@ class Bot extends BaseCommand
                     $this->sendToCurrent('emit: 42');
                     break;
                 default:
-                    if(starts_with($incomingMessage, ['@presence', $this->myId])) {
+                    if(starts_with($incomingMessage, ['@presence', $this->myId, "<@{$this->myId}>"])) {
                         $this->sendToCurrent('Does not compute!');
                     }
                     break;
             }
+        }
+    }
+
+    protected function guardAgainstBots($isBot, $canIdentifyUser, $callback) {
+        if ($isBot) {
+            $this->sendToCurrent("I'm sorry, but bots cannot do that. Please use the slack client");
+        } else if (! $canIdentifyUser) {
+            $this->sendToCurrent("I'm sorry, but I can't seem to identify your user id");
+        } else {
+            $callback();
         }
     }
 
