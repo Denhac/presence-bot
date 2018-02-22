@@ -34,7 +34,7 @@ class Scanner
     public function scan()
     {
         
-        $command = 'arp scan';
+        $command = 'arp-scan';
 
         // test if we specified interface first
         if (isset($this->interface)) {
