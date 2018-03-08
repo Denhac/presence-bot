@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class DatabaseCommand.
  *
- * TODO: Describeme
+ * This command needs to be run to create the required tables for the software.
  *
  * @author Mark Vaughn <iftrueelsefalse@gmail.com>
  * @package Presence\Commands
