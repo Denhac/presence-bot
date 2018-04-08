@@ -160,7 +160,7 @@ class Bot extends BaseCommand
                 ->map(function ($record) {
                     return (string)$record;
                 })
-                ->implode('\n');
+                ->implode("\n");
 
             $this->sendToCurrent($message);
         } else {
@@ -229,7 +229,7 @@ class Bot extends BaseCommand
         );
 
         if ($members->count() > 0) {
-            $message .= ', including ' . $members->implode('user', ', ');
+            $message .= ', including ' . $members->implode(', ');
         }
 
         $this->sendToCurrent($message);

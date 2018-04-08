@@ -63,6 +63,6 @@ class Mac extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('last_seen_at', '<', Carbon::now()->subMinutes(3)->toDateTimeString());
+        return $query->where('last_seen_at', '>', Carbon::now()->subMinutes(3)->toDateTimeString());
     }
 }
