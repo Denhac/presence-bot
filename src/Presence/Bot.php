@@ -30,6 +30,24 @@ class Bot extends BaseCommand
         //
     }
 
+    // We're overriding this function because we want to use the display name in slack
+    protected function getUserNameFromUserId($userId) {
+        $username = 'unknown';
+
+        foreach ($this->getCurrentContext()['users'] as $user) {
+            if ($user['id'] == $userId) {
+                $username = $user['name'];
+                if(array_key_exists('profile', $user)) {
+                    if(array_key_exists('display_name', $user['profile'])) {
+                        $username = $user['profile']['display_name'];
+                    }
+                }
+            }
+        }
+
+        return $username;
+    }
+
     protected function execute($data, $context)
     {
         if (empty($this->myId)) {
