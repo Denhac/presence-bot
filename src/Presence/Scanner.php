@@ -36,6 +36,12 @@ class Scanner
         
         $command = 'arp-scan';
 
+        // since 1024 hosts are in a /20, which is the CIDR prefix at denhac,
+        // we approximate that 1ms of wait = 1 second to complete the ARP sweep.
+        // yes this is a magic number and bad manners.
+        // set sweep to take about 20 seconds
+        $command = "{$command} --interval=20";
+                
         // test if we specified interface first
         if (isset($this->interface)) {
             $command = "{$command} --interface={$this->interfaces}";
