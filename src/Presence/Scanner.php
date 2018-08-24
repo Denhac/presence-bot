@@ -37,6 +37,8 @@ class Scanner
         $command = 'arp-scan';
 
         // test if we specified interface first
+        // 60000 ms / 1024 hosts ~= 60ms interval to complete a host sweep in 60 sec
+        $command = "{$command} --interval=60";
         if (isset($this->interface)) {
             $command = "{$command} --interface={$this->interfaces}";
         }
